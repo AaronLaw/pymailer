@@ -1,0 +1,57 @@
+Return-Path: <aaronishere@gmail.com>
+Received: from [192.168.1.100] (m182-152-227-166.smartone-vodafone.com [182.152.227.166])
+        by mx.google.com with ESMTPS id w42sm17967326wfh.15.2011.01.24.14.10.46
+        (version=SSLv3 cipher=RC4-MD5);
+        Mon, 24 Jan 2011 14:10:47 -0800 (PST)
+Message-ID: <4D3DF8E4.7010704@gmail.com>
+Date: Mon, 24 Jan 2011 22:10:44 +0000
+From: aaronishere <aaronishere@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.9) Gecko/20100922 Thunderbird/3.1.4
+MIME-Version: 1.0
+To: aaronishere@gmail.com
+Subject: Char-set test from Thunderbird
+Content-Type: multipart/alternative;
+ boundary="------------020901020702000302070608"
+
+This is a multi-part message in MIME format.
+--------------020901020702000302070608
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+
+Dear all,
+I am writing a mailing program and doing a test. please DO REPLY me if 
+you got this email.(just press the REPLY BUTTON to let me see the actual 
+mail)
+
+This is the body of the message ??BBC's Top 100 Best Novels 
+BBC:????????100???.???????. A URL <http://www.google.com> port 465 by 
+SMTP_SSL interval test. Content-type = text/html
+by Thunderbird, char-set not set
+
+--------------020901020702000302070608
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body text="#000000" bgcolor="#ffffff">
+    <br>
+    Dear all, <br>
+    I am writing a mailing program and doing a test. please DO REPLY me
+    if you got this email.(just press the REPLY BUTTON to let me see the
+    actual mail)<br>
+    <br>
+    This is the body of the message &#25105;&#20497;BBC&#8217;s Top 100 Best Novels
+    BBC&#65306;&#26377;&#21490;&#20197;&#26469;&#26368;&#20255;&#22823;&#30340;100&#37096;&#23567;&#35828;.&#26377;&#25928;&#30340;&#23416;&#32722;&#26041;&#27861;.
+    <a href="http://www.google.com">A URL</a> port 465 by SMTP_SSL
+    interval test. Content-type = text/html<br>
+    by Thunderbird, char-set not set<br>
+  </body>
+</html>
+
+--------------020901020702000302070608--

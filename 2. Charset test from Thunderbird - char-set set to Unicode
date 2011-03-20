@@ -1,0 +1,56 @@
+Return-Path: <aaronishere@gmail.com>
+Received: from [192.168.1.100] (m182-152-227-166.smartone-vodafone.com [182.152.227.166])
+        by mx.google.com with ESMTPS id c3sm4339121wfa.2.2011.01.24.14.11.52
+        (version=SSLv3 cipher=RC4-MD5);
+        Mon, 24 Jan 2011 14:11:53 -0800 (PST)
+Message-ID: <4D3DF926.1000504@gmail.com>
+Date: Mon, 24 Jan 2011 22:11:50 +0000
+From: aaronishere <aaronishere@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.9) Gecko/20100922 Thunderbird/3.1.4
+MIME-Version: 1.0
+To: aaronishere@gmail.com
+Subject: char-set test from Thunderbird
+Content-Type: multipart/alternative;
+ boundary="------------090402070701010506080503"
+
+This is a multi-part message in MIME format.
+--------------090402070701010506080503
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+
+Dear all,
+I am writing a mailing program and doing a test. please DO REPLY me if 
+you got this email.(just press the REPLY BUTTON to let me see the actual 
+mail)
+
+This is the body of the message 我們BBC’s Top 100 Best Novels BBC：有史 
+以来最伟大的100部小说.有效的學習方法. A URL <http://www.google.com> port 
+465 by SMTP_SSL interval test. Content-type = text/html
+by Thunderbird, char-set set to Unicode
+
+--------------090402070701010506080503
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  </head>
+  <body text="#000000" bgcolor="#ffffff">
+    <br>
+    Dear all, <br>
+    I am writing a mailing program and doing a test. please DO REPLY me
+    if you got this email.(just press the REPLY BUTTON to let me see the
+    actual mail)<br>
+    <br>
+    This is the body of the message 我們BBC’s Top 100 Best Novels
+    BBC：有史以来最伟大的100部小说.有效的學習方法.
+    <a href="http://www.google.com">A URL</a> port 465 by SMTP_SSL
+    interval test. Content-type = text/html<br>
+    by Thunderbird, char-set set to Unicode<br>
+  </body>
+</html>
+
+--------------090402070701010506080503--
