@@ -41,6 +41,13 @@
 # Version 1.2.0: Grouping mailing process by function for abstraction (v1.1.1 is the last one with on use of function)
 #		1. sendMassMail()...done
 #		2. sendMail()...done
+#		3. sendRepeatMail...leave for TODO
+# Version 1.2.1: Bug fix: A bug is found since V1.1.0 (changes from V1.0.3 to V1.1.0: I give a list of addresses from a internal list in V1.0.3...and I give a list of addresses to 'toAddr' from a file in V1.1.0)
+#		The bug is: Mail is send as plain text rather than html mail even though content-type is set to 'text/html'. It is caused by the ending return char ('\n') at the end of the email address. 
+#			(I find that bug in the code 'for toSingleAddr in mailList:' in sendMassMail().
+#			I find the difference between reading addresses from an internal list and from a file by  doing "print toSingleAddr":
+#				 1. from an internal addresses list -> results in "aaronishere@gmail.com"
+#				 2. Reading addresses from a file -> results in "aaronishere@gmail.com\n". And the ending '\n' leads to the bug)
 #	
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -137,7 +144,9 @@ def sendMassMail(subject, content, fromAddr, mailList, smtpAddr, username, passw
 	for toSingleAddr in mailList:
 
 		print 'Processing ' + toSingleAddr + '...'
- 		isSuccess = sendMail(subject, content, fromAddr, toSingleAddr, smtpAddr, username, password, port, sleep)
+		toAddr = toSingleAddr.rstrip("\r\n")  # work around: the ending '\n' char in an address leads to a bug. That bug is 'text\html' doesn't work and leads to the outing mail being plain text
+					# Reference: Google: python remove \n
+ 		isSuccess = sendMail(subject, content, fromAddr, toAddr, smtpAddr, username, password, port, sleep)
 		if isSuccess is True:
 			count = count + 1 # count is up only when mail out was success (@see isSuccess in sendMail())
 			print 'Mail #',count,' is sent to ' + toSingleAddr + '.'
