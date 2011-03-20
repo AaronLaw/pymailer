@@ -60,16 +60,17 @@ from SendMail import SmartMessage, MailServer
 
 ### for used by class SmartMessage
 subject = "hello, this is a content-type test from aaron"
-content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html<br />by python mailer v1.0.3"
-msg = SmartMessage(fromAddr, toAddr, subject, content)
+content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html"
+#msg = SmartMessage(fromAddr, toAddr, subject, content)
 # change the content-type to enable HTML
-msg.set_type('text/html')
+#msg.set_type('text/html')
 #print msg.get_content_type()
 #msg = str(msg) # make SmartMessage object to string if not use MailServer to send mail
 
 ### use python built-in smtplib to connect to server
 #if isOverSSL is True: # server connected over SSL
 #	server = smtplib.SMTP_SSL(smtpAddr, port)
+
 #else:
 #	server = smtplib.SMTP(smtpAddr, port)
 #server.login(username, password)
@@ -79,14 +80,18 @@ msg.set_type('text/html')
 #MailServer(smtpAddr, username, password, port).sendMessage(msg)
 
 ##### MAIN ######
+count = 0
 try: 
-	#while counter <= len(sys.argv[1]):
-	for count in range(int(sys.argv[1])): #loop through the range in the cmd argv given
-		msgCount = "\n\nThis is the "+ str(count) +" out of "+ str(sys.argv[1]) +" mail, with a time interval = " + str(intervalPerAction) + "seconds."
+	for toSingleAddr in toAddr: # send to A PERSON in the address list each time
+		#msgCount = "\n\nThis is the "+ str(count) +" out of "+ str(sys.argv[1]) +" mail, with a time interval = " + str(intervalPerAction) + "seconds."
 		
+		#server.sendmail(fromAddr, toAddr, msg+msgCount)
+		msg = SmartMessage(fromAddr, toSingleAddr, subject, content)
+		msg.set_type('text/html')
 		MailServer(smtpAddr, username, password, port).sendMessage(msg)
 		time.sleep(intervalPerAction)
-		print 'Mail #',count ,'is sent.'
+		count = count + 1
+		print 'Mail #', count,' is sent to ' + toSingleAddr + '.'
 except Exception as error: 
-	print error
+	print (error)
 	print ('There was no such file.', error)
