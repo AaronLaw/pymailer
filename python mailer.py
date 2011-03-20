@@ -38,6 +38,9 @@
 #		1. Able to read email addresses from a text-based mailing list
 #		2. Send to receivers on mailing list one after one
 # Version 1.1.1: Code clean up, and make reading mailinglist file a function for handling file error
+# Version 1.2.0: Grouping mailing process by function for abstraction (v1.1.1 is the last one with on use of function)
+#		1. sendMassMail()...done
+#		2. sendMail()...done
 #	
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -65,7 +68,7 @@ fromAddr = 'test@test.com'
 toAddr = ['gethighprofit@gmail.com','Aaron <aaronishere@gmail.com>']#, 'aaronlaw@gmail.com',  'herbalifeaaron@yahoo.com.hk', 'Kaiser KS <wwwkaiserkscom@gmail.com>', 'luk Benny <lukkaihang@hotmail.com>']
 isOverSSL = True
 
-intervalPerAction = 0.5 # in second
+intervalPerAction =  2 # in second
 intervalPerBunch = 10*60 # min = time*60sec
 #################################
 
@@ -79,7 +82,11 @@ intervalPerBunch = 10*60 # min = time*60sec
 #################################	
 
 #TODO: http://www.wrox.com ISBN is 978-0-470-41463-7
-# http://www.wrox.com/dynamic/books/download.aspx 
+# http://www.wrox.com/dynamic/books/download.aspx
+# Google: use python to send email 
+# Google: use python to send email header
+# Google: use php to send email -> cation on the setting of 'header'
+# http://docs.python.org/library/smtplib.htm
 
 from SendMail import SmartMessage, MailServer
 
@@ -90,6 +97,7 @@ from SendMail import SmartMessage, MailServer
 ### Setup text or HTML mail here (by class SmartMessage)
 subject = "hello, this is a content-type test from aaron"
 content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message<br /><a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html"
+content = content + '<p>@Version 1.2.0</p>'
 
 ##### FUNCTION ######
 def readTxt(fname):
@@ -103,6 +111,51 @@ def readTxt(fname):
 		print ('Oh! Program is going to terminate')		
 		sys.exit()
 
+### sendMail() sends one mail from a list (one mail to a bunch of people each time)
+### It accepts a bunch of address in a list (e.g. ['1@test.com', '2@test.com'])
+def sendMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep):
+	isSuccess = False	
+	try:
+		msg = SmartMessage(fromAddr, toAddrList, subject, content)
+		msg.set_type('text/html')
+		MailServer(smtpAddr, username, password, port).sendMessage(msg)
+
+		time.sleep(sleep)
+		isSuccess = True	
+	except (Exception) as error: 
+		#print (error)
+		print ('There is an error occured during sending mail.', error)
+		### put invalid mail addresses in a list to show later
+		#invalidAddr.append(toSingleAddr)
+	return isSuccess # return True when mail send successfully
+
+### sendMassMail() does sending mail to a receiver once a time
+def sendMassMail(subject, content, fromAddr, mailList, smtpAddr, username, password, port, sleep=5):
+	count = 0
+	totalOfAddr = 0
+	print 'I am in mass mail mode. I am goint to send mail in every '+ str(sleep) + ' second.'
+	for toSingleAddr in mailList:
+
+		print 'Processing ' + toSingleAddr + '...'
+ 		isSuccess = sendMail(subject, content, fromAddr, toSingleAddr, smtpAddr, username, password, port, sleep)
+		if isSuccess is True:
+			count = count + 1 # count is up only when mail out was success (@see isSuccess in sendMail())
+			print 'Mail #',count,' is sent to ' + toSingleAddr + '.'
+		else:
+			print 'Mail #',count,' is not sent to ' + toSingleAddr +'.'
+
+		totalOfAddr = totalOfAddr + 1 # totalOfAddr is up whenever mail out was success or not
+
+	print('There are ', count, ' out of', totalOfAddr, 'mail sent successfully.')
+
+### mailList is a list of receivers
+def sendRepeatMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep=5, repeat=1):
+	print 'I am in repeat mail mode. I am goint to send mail in every '+ str(sleep) + ' second.'
+	for i in repeat:
+		print 'Repeat mail round #', i
+		print 'Processing... ' + toSingleAddr,
+		sendMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep)
+
 ##### MAIN ######
 count = 0
 totalOfAddr = 0 # number of email recever
@@ -112,23 +165,9 @@ mailingList = readTxt(sys.argv[1])
 #print( type(mailingList))
 #totalOfAddr = len(mailingList.readlines())
 print('Mail is begin to send...' )
+#sendMail(subject, content, fromAddr, ['hh@gg.com', '22@33.com'], smtpAddr, username, password, port, intervalPerAction)
+#sendMassMail(subject, content, fromAddr, ['hh@test.com', '22@test.com'], smtpAddr, username, password, port, intervalPerAction)
+sendMassMail(subject, content, fromAddr, mailingList, smtpAddr, username, password, port, intervalPerAction)
 
-for toSingleAddr in mailingList: # send to A PERSON in the address list each time
-	try:	
-		totalOfAddr = totalOfAddr + 1 # totalOfAddr is up whenever mail out was success or not
-		#server.sendmail(fromAddr, toAddr, msg+msgCount)
-		msg = SmartMessage(fromAddr, toSingleAddr, subject, content)
-		msg.set_type('text/html')
-		MailServer(smtpAddr, username, password, port).sendMessage(msg)
-		
-		time.sleep(intervalPerAction)
-		count = count + 1 # count is up only when mail out was success
-		print 'Mail #',count,' is sent to ' + toSingleAddr + '.'
-	except (Exception) as error: 
-		#print (error)
-		print ('There is an error occured during sending mail.', error)
-		### put invalid mail addresses in a list to show later
-		invalidAddr.append(toSingleAddr)
 
-print('There are ', count, ' out of', totalOfAddr, 'mail sent successfully.')
 print invalidAddr
