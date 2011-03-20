@@ -118,15 +118,15 @@ class MailServer(SMTP_SSL):
 		self.user = serverUser
 		self.password = serverPassword
 		#Uncomment this line to see the SMTP exchange in detail.
-		self.set_debuglevel(True)
+		#self.set_debuglevel(True)
 	def sendMessage(self, message):
 		"Sends the given message through the SMTP server."
 		#Some SMTP servers require authentication.
-		#if self.user:
-		try:
-			self.login(self.user, self.password)
-		except Exception:
-			print (Exception)
+		if self.user:
+			try:
+				self.login(self.user, self.password)
+			except Exception:
+				print (Exception)
 			
 		#The message contains a list of destination addresses that
 		#might have names associated with them. For instance,
@@ -136,11 +136,11 @@ class MailServer(SMTP_SSL):
 		#with it.
 		destinations = message.to
 		if hasattr(destinations, '__iter__'):
-			destinations = map(self._cleanAddress, destinations)
+			destinations = map(self.__cleanAddress, destinations)
 		else:
-			destinations = self._cleanAddress(destinations)
+			destinations = self.__cleanAddress(destinations)
 		self.sendmail(message['From'], destinations, str(message))
-	def _cleanAddress(self, address):
+	def __cleanAddress(self, address):
 		"Transforms 'Name <e-mail@domain>' into 'e-mail@domain'."
 		parts = address.split('<', 1)
 		if len(parts) > 1:
