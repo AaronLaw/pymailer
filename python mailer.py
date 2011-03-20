@@ -48,7 +48,9 @@
 #			I find the difference between reading addresses from an internal list and from a file by  doing "print toSingleAddr":
 #				 1. from an internal addresses list -> results in "aaronishere@gmail.com"
 #				 2. Reading addresses from a file -> results in "aaronishere@gmail.com\n". And the ending '\n' leads to the bug)
-#	
+# Version 1.2.1.1: Enhance mail's charset. msg.set_charset() is set to UTF8
+#
+#
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
 #	3. [x] Repeat mailing (Can I send out a mail to a person, 180 times in a 5 sec interval?)
@@ -102,8 +104,8 @@ from SendMail import SmartMessage, MailServer
 #msg = msg + "This is the body of the message\n\n<a href='http://www.google.com>A URL</a> port 465 by SMTP_SSL interval test"
 
 ### Setup text or HTML mail here (by class SmartMessage)
-subject = "hello, this is a content-type test from aaron"
-content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message<br /><a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html"
+subject = "Charset test from Aaron's python mailer - char-set set to UTF-8, content-type set to text/html 你現在可以做的事…"
+content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message<br /><a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html 個人訪問"
 content = content + '<p>@Version 1.2.0</p>'
 
 ##### FUNCTION ######
@@ -125,6 +127,10 @@ def sendMail(subject, content, fromAddr, toAddrList, smtpAddr, username, passwor
 	try:
 		msg = SmartMessage(fromAddr, toAddrList, subject, content)
 		msg.set_type('text/html')
+		msg.set_charset('UTF-8')
+		#msg.add_header('Content-Transfer-Encoding', '8bit')
+		#print msg.get_content_charset()		
+		#print(msg)
 		MailServer(smtpAddr, username, password, port).sendMessage(msg)
 
 		time.sleep(sleep)
