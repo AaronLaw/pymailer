@@ -13,13 +13,15 @@
 #		2. Test for sending out email to a receiver in a giver time interval automatically (e.g. send out a mail every 5 seconds)
 # Version 1.0.2: Able to send out HTML message now
 # Version 1.0.3: Re-enable the use of SmartMessage, MailServer for abstraction
+# Version 1.1.0: Able to read email addresses from a text-based mailing list
 
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
 #	3. [x] Repeat mailing (Can I send out a mail to a person, 180 times in a 5 sec interval?)
-#	4. [] Change of program behavior: Send out email from an internal email-address-list (more than 1 receiver) in a single loop, one receiver each time
+#	4. [x] Change of program behavior: Send out email from an internal email-address-list (more than 1 receiver) in a single loop, one receiver each time
 #	5. [x] Able to send out text/html message rather than text/plain only
-#	6. [] Read email addresses from a text-based mailing list
+#	6. [x] Read email addresses from a text-based mailing list
+#		6.1 [] Make it robust to handle dead/invaild email address
 #	7. [] Message template: Able to read external file as the content (html) of the message body
 #	8. [] Warp up: Tidy up code section to let others use my program...easily (May be warp up with function)
 ##############################################################
@@ -60,29 +62,15 @@ from SendMail import SmartMessage, MailServer
 
 ### for used by class SmartMessage
 subject = "hello, this is a content-type test from aaron"
-content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html"
-#msg = SmartMessage(fromAddr, toAddr, subject, content)
-# change the content-type to enable HTML
-#msg.set_type('text/html')
-#print msg.get_content_type()
-#msg = str(msg) # make SmartMessage object to string if not use MailServer to send mail
-
-### use python built-in smtplib to connect to server
-#if isOverSSL is True: # server connected over SSL
-#	server = smtplib.SMTP_SSL(smtpAddr, port)
-
-#else:
-#	server = smtplib.SMTP(smtpAddr, port)
-#server.login(username, password)
-#server.sendmail(fromAddr, toAddr, msg)
-
-### use custom class MailServer to connect to server
-#MailServer(smtpAddr, username, password, port).sendMessage(msg)
+content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html<br /> by python mailer v1.1.0"
 
 ##### MAIN ######
 count = 0
+fname = sys.argv[1]
+file = open(fname, 'r')
+
 try: 
-	for toSingleAddr in toAddr: # send to A PERSON in the address list each time
+	for toSingleAddr in file: # send to A PERSON in the address list each time
 		#msgCount = "\n\nThis is the "+ str(count) +" out of "+ str(sys.argv[1]) +" mail, with a time interval = " + str(intervalPerAction) + "seconds."
 		
 		#server.sendmail(fromAddr, toAddr, msg+msgCount)
