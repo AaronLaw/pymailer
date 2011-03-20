@@ -9,6 +9,7 @@
 # 		http://www.wrox.com/dynamic/books/download.aspx 
 #
 # Version 1.0: 	Original code from James Payne: class SmartMessage, MailServer, which are wrapper class for python's built-in function of mailing, in SendMail.py
+# Version 1.0.1: Change MailServer(SMTP) to MailServer(SMTP_SSL) for Gmail's connection (Gmail's connection is over SSL)
 
 
 #TODO:	1. [x] Use James Payne's code to make better handling of making mail
@@ -108,8 +109,8 @@ class SmartMessage:
 		return self.msg.as_string()
 # end of class SmartMessage
 
-from smtplib import SMTP
-class MailServer(SMTP):
+from smtplib import SMTP, SMTP_SSL
+class MailServer(SMTP_SSL):
 	"A more user-friendly interface to the default SMTP class."
 	def __init__(self, server, serverUser=None, serverPassword=None, port=465):
 		"Connect to the given SMTP server."
