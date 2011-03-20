@@ -12,7 +12,7 @@
 #		1. Setting of Gmail's SMTP server is tested (smtp.gmail.com:465 over SSL). Classes SmartMessage & MailServer are not in use temply due to Gmail's SSL problem.
 #		2. Test for sending out email to a receiver in a giver time interval automatically (e.g. send out a mail every 5 seconds)
 # Version 1.0.2: Able to send out HTML message now
-
+# Version 1.0.3: Re-enable the use of SmartMessage, MailServer for abstraction
 
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -52,32 +52,28 @@ intervalPerBunch = 10*60 # min = time*60sec
 #TODO: http://www.wrox.com ISBN is 978-0-470-41463-7
 # http://www.wrox.com/dynamic/books/download.aspx 
 
+from SendMail import SmartMessage, MailServer
 
 ### for used by smtplib simply
 #msg = "Subject: Hello, a test from aaron's self made program\n\n"
 #msg = msg + "This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com>A URL</a> port 465 by SMTP_SSL interval test"
 
 ### for used by class SmartMessage
-from SendMail import SmartMessage, MailServer
-
 subject = "hello, this is a content-type test from aaron"
-msg = SmartMessage(fromAddr, 
-		toAddr,
-		subject,
-		"Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html<br />python mailer v1.0.2")
+content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message\n 我們BBC’s Top 100 Best Novels BBC：有史以来最伟大的100部小说.有效的學習方法.\n<a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html<br />by python mailer v1.0.3"
+msg = SmartMessage(fromAddr, toAddr, subject, content)
 # change the content-type to enable HTML
 msg.set_type('text/html')
 #print msg.get_content_type()
-msg = str(msg) # make SmartMessage object to string if not use MailServer to send mail
+#msg = str(msg) # make SmartMessage object to string if not use MailServer to send mail
 
 ### use python built-in smtplib to connect to server
-if isOverSSL is True: # server connected over SSL
-	server = smtplib.SMTP_SSL(smtpAddr, port)
-
-else:
-	server = smtplib.SMTP(smtpAddr, port)
-server.login(username, password)
-server.sendmail(fromAddr, toAddr, msg)
+#if isOverSSL is True: # server connected over SSL
+#	server = smtplib.SMTP_SSL(smtpAddr, port)
+#else:
+#	server = smtplib.SMTP(smtpAddr, port)
+#server.login(username, password)
+#server.sendmail(fromAddr, toAddr, msg)
 
 ### use custom class MailServer to connect to server
 #MailServer(smtpAddr, username, password, port).sendMessage(msg)
@@ -88,9 +84,8 @@ try:
 	for count in range(int(sys.argv[1])): #loop through the range in the cmd argv given
 		msgCount = "\n\nThis is the "+ str(count) +" out of "+ str(sys.argv[1]) +" mail, with a time interval = " + str(intervalPerAction) + "seconds."
 		
-		server.sendmail(fromAddr, toAddr, msg+msgCount)
+		MailServer(smtpAddr, username, password, port).sendMessage(msg)
 		time.sleep(intervalPerAction)
-		
 		print 'Mail #',count ,'is sent.'
 except Exception as error: 
 	print error
