@@ -10,6 +10,7 @@
 #
 # Version 1.0: 	Original code from James Payne: class SmartMessage, MailServer, which are wrapper class for python's built-in function of mailing, in SendMail.py
 # Version 1.0.1: Change MailServer(SMTP) to MailServer(SMTP_SSL) for Gmail's connection (Gmail's connection is over SSL)
+# Version 1.0.2: Exception in user login: Fixing try...except block to raise an SMTPAuthenticationError exception
 
 
 #TODO:	1. [x] Use James Payne's code to make better handling of making mail
@@ -123,11 +124,13 @@ class MailServer(SMTP_SSL):
 		"Sends the given message through the SMTP server."
 		#Some SMTP servers require authentication.
 		if self.user:
-			try:
-				self.login(self.user, self.password)
-			except Exception:
-				print (Exception)
-			
+			#try:
+			#	self.login(self.user, self.password)
+			#except Exception as error:
+			#	print (error)
+			### use raise Exception instead
+			if not self.login(self.user, self.password):
+				raise Exception('username & password is NOT correct. Pls try again.')
 		#The message contains a list of destination addresses that
 		#might have names associated with them. For instance,
 		#"J. Random Hacker <jhacker@example.com>". Some mail servers
