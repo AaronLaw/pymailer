@@ -49,7 +49,7 @@
 #				 1. from an internal addresses list -> results in "aaronishere@gmail.com"
 #				 2. Reading addresses from a file -> results in "aaronishere@gmail.com\n". And the ending '\n' leads to the bug)
 # Version 1.2.1.1: Enhance mail's charset. msg.set_charset() is set to UTF8
-#
+# Version 1.2.1.2: Program is pause in a time period in mass mail mode. Variable intervalPerBunch is in use now
 #
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -72,13 +72,13 @@ import smtplib # for SMTP mailing features
 smtpAddr = 'smtp.gmail.com' #@see REFERENCE section
 port = '465'
 username = 'aaronishere@gmail.com'
-password = '06936841'
+password = '06936841' #ZdC0oII0
 fromAddr = 'test@test.com'
 toAddr = ['gethighprofit@gmail.com','Aaron <aaronishere@gmail.com>']#, 'aaronlaw@gmail.com',  'herbalifeaaron@yahoo.com.hk', 'Kaiser KS <wwwkaiserkscom@gmail.com>', 'luk Benny <lukkaihang@hotmail.com>']
 isOverSSL = True
 
 intervalPerAction =  2 # in second
-intervalPerBunch = 10*60 # min = time*60sec
+intervalPerBunch = 5*60 # min = time*60sec
 #################################
 
 ###### REFERENCE ######
@@ -88,6 +88,8 @@ intervalPerBunch = 10*60 # min = time*60sec
 #hotmail:	
 #mail.com:	
 #inbox.com:	
+#gmx.com:	mail.gmx.com:465
+#kaiserks.com:	mail.photo.kaiserks.com
 #################################	
 
 #TODO: http://www.wrox.com ISBN is 978-0-470-41463-7
@@ -104,9 +106,74 @@ from SendMail import SmartMessage, MailServer
 #msg = msg + "This is the body of the message\n\n<a href='http://www.google.com>A URL</a> port 465 by SMTP_SSL interval test"
 
 ### Setup text or HTML mail here (by class SmartMessage)
-subject = "Charset test from Aaron's python mailer - char-set set to UTF-8, content-type set to text/html 你現在可以做的事…"
-content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message<br /><a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html 個人訪問"
-content = content + '<p>@Version 1.2.0</p>'
+subject = "想係屋企度工作? 你現在可以做的事…"
+#content = "Dear all, <br />I am writing a mailing program and doing a test. please DO REPLY me if you got this email.(just press the REPLY BUTTON to let me see the actual mail)<br /><br />This is the body of the message<br /><a href='http://www.google.com'>A URL</a> port 465 by SMTP_SSL interval test. Content-type = text/html 個人訪問"
+content = '''
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#ffffff" text="#000000">
+    <div class="moz-text-html" lang="x-western">
+      <div class="moz-text-html" lang="x-western">
+        <div class="moz-text-html" lang="x-unicode">
+          <div class="moz-text-html" lang="x-unicode"> <font size="2"
+              color="black" face="arial">
+              <div>
+                <div style="margin-bottom: 0cm;"><big><big>返工好無聊？但又唔知點樣可
+                      以賺 取外 快？<br>
+                    </big></big><br>
+                  <font size="4">你在尋找的，不是一個受薪的工作，</font></div>
+                <div style="margin-bottom: 0cm;"><font size="4">而是一個運用電腦
+                    在家 工作 的生 意機 會</font></div>
+                <div style="margin-bottom: 0cm;"><font size="4">你可藉此機會，選
+                    擇……</font><font><font><font size="4">.</font></font></font></div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font><font><font
+                        size="4"><b>1. </b></font></font></font><font
+                    size="4"><b>時 間自由地兼職工作</b></font><font size="4">，或</font><font
+                    size="4"> </font> </div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font><font><font
+                        size="4"><b>2. </b></font></font></font><font
+                    size="4"><b>全 程投入達至財務自由。</b></font></div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font
+                    size="4">請 登入以下網站</font></div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><br>
+                </div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font
+                    size="5" color="darkcyan"><a
+                      href="http://www.gethighprofit.com/"
+                      target="_blank">http://www.<span>gethighprofit</span>.com/</a></font><br>
+                </div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><br>
+                </div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><br>
+                </div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font
+                    size="4"><br>
+                  </font></div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font><font><font
+                        size="2">***</font></font></font><font size="2">如
+                    閣 下不 想再 接受 本公司的電郵廣告，請回覆此電郵，<wbr>以便本公司取消閣下之電郵地址</font></div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font><font><font
+                        style="font-size: 8pt;" size="1">All right
+                        reserved for this Keep Fit Promotion. Please do
+                        not delete or change the content.</font></font></font></div>
+                <div style="margin-bottom: 0cm;" align="JUSTIFY"><font
+                    style="font-size: 8pt;" size="1">此廣告宣傳是受香港版權約束，請勿隨意刪
+                    除及 更改 內容</font><font><font><font style="font-size:
+                        8pt;" size="1">***</font></font></font></div>
+              </div>
+            </font> </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
+
+'''
+content = content + '<p>I am Hong Kong people@TST</p>'
 
 ##### FUNCTION ######
 def readTxt(fname):
@@ -160,7 +227,10 @@ def sendMassMail(subject, content, fromAddr, mailList, smtpAddr, username, passw
 			print 'Mail #',count,' is not sent to ' + toSingleAddr +'.'
 
 		totalOfAddr = totalOfAddr + 1 # totalOfAddr is up whenever mail out was success or not
-
+		# pause every 30 mail
+		if totalOfAddr % 30 == 0:
+			print('I am going to sleep ',intervalPerBunch, 'seconds.')
+			time.sleep(intervalPerBunch)
 	print('There are ', count, ' out of', totalOfAddr, 'mail sent successfully.')
 
 ### mailList is a list of receivers
