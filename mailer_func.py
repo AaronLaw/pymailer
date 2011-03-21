@@ -62,7 +62,7 @@ def sendMassMail(subject, content, fromAddr, mailList, smtpAddr, username, passw
 	totalOfAddr = 0
 	#intervalPerBunch = pauseInRandom(sleep)*60 # min = time*60sec # move downward, not in here...see a bug?
 	print 'I am in mass mail mode. I am goint to send mail in average every '+ str(sleep) + ' second.'
-	sendMail('Notice: '+subject+ ' from '+ fromAddr, content, fromAddr, 'gethighprofit@gmail.com', smtpAddr, username, password, port)
+	sendMail('Notice: '+subject+ ' from '+ fromAddr, content, fromAddr, ['aaronishere@gmail.com', 'gethighprofit@gmail.com'], smtpAddr, username, password, port)
 	for toSingleAddr in mailList:
 		print 'Processing ' + toSingleAddr + '...'
 		toAddr = toSingleAddr.rstrip("\r\n")  # work around: the ending '\n' char in an address leads to a bug. That bug is 'text\html' doesn't work and leads to the outing mail being plain text
