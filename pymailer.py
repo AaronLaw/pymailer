@@ -62,6 +62,14 @@
 # Version 1.2.1.2_freeze:
 #		Same as Version 1.2.1.2, excepts all custom functions are moved to mailer_func.py 
 # Version 1.3: Intend to simulate human's behaviour:
+#		Facting some problems in reality:
+#		I and Benny report that Gmail blocks our accounts due to:
+#		1. Every out mail is the same in a bulk amount 
+#		2. too much of mail is sent
+#		As the fundamentual function of mail sending is done, I intend to make this program like a bots, acts like a human being to confuse Gmail server.
+#		1. pauseInRandom()...done
+#		2. delayLikeAHuman()...done
+#		3. randomString()...done
 #		Function prototype correction: remove unneccessary argement "sleep" from sendMail(..., sleep)
 #
 #TODO:	1. [x] Fix encoding problem (unicode support)
@@ -191,11 +199,12 @@ content = '''
 </html>
 
 '''
-content = content + '<p>I am Hong Kong people@TST</p>'
+#content = content + '<p>I am Hong Kong people@TST</p>'
 
 ##### FUNCTION ######
 ### @Version1.2.1.2_freeze: moved to mailer_func.py
 from mailer_func import *
+content = content + '<p style="display:none">'+ randomString()+ '</p>'
 ##### MAIN ######
 count = 0
 totalOfAddr = 0 # number of email recever
