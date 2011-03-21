@@ -5,7 +5,7 @@
 #		This script opens a mailing list (a file supplied) in command argv and mails it to every receiver in a given time interval (to prevent spam jam).
 # Author: 	Aaron Law
 # Date:		2011-01-22
-# Last update:	2011-01-24
+# Last update:	2011-02-06
 #
 # Original Problem: 	[Write down to clear my mind...]
 #		I need to send out mail to many people at work. This is a mass email for ads. I can do it with a free gmail/yahoo email account with my bare hands, but...
@@ -26,6 +26,7 @@
 #		 -> Can I use this program at work NOW?]
 #
 #############################################################
+# 2011-01-22:
 # Version 0: 	initial to test python features.
 # Version 1.0: 	add class SmartMessage, MailServer, which are wrapper class for python's built-in function of mailing, in SendMail.py
 #		fix encoding problem in SendMail.py. Now can send Chinese character
@@ -38,6 +39,8 @@
 #		1. Able to read email addresses from a text-based mailing list
 #		2. Send to receivers on mailing list one after one
 # Version 1.1.1: Code clean up, and make reading mailinglist file a function for handling file error
+#
+# 2011-01-23: In production
 # Version 1.2.0: Grouping mailing process by function for abstraction (v1.1.1 is the last one with on use of function)
 #		1. sendMassMail()...done
 #		2. sendMail()...done
@@ -48,8 +51,16 @@
 #			I find the difference between reading addresses from an internal list and from a file by  doing "print toSingleAddr":
 #				 1. from an internal addresses list -> results in "aaronishere@gmail.com"
 #				 2. Reading addresses from a file -> results in "aaronishere@gmail.com\n". And the ending '\n' leads to the bug)
+#
+# 2011-01-24:
 # Version 1.2.1.1: Enhance mail's charset. msg.set_charset() is set to UTF8
+#
+# 2011-01-26:
 # Version 1.2.1.2: Program is pause in a time period in mass mail mode. Variable intervalPerBunch is in use now
+#
+# 2011-02-06:
+# Version 1.2.1.2_freeze:
+#			Same as Version 1.2.1.2, excepts custom functions are moved to mailer_func.py 
 #
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -59,9 +70,11 @@
 #	6. [x] Read email addresses from a text-based mailing list
 #		6.1 [x] Make it robust to handle dead/invaild email address (no program crash)
 #	7. [] Message template: Able to read external file as the content (html) of the message body
-#	8. [] Warp up: Tidy up code section to let others use my program...easily (May be warp up with function)
+#	8. [x] Warp up: Tidy up code section to let others use my program...easily (May be warp up with function)
 #	9. [] Write hints for usage
 # 	10. [] Have I separate data and logic?
+#	11. [] As a bots: Simulate human's behaviour to confuse mail providers
+#	12..[] Multiple-user-account: randomly pick up a user account to send mail to prevent mail providers' daily-out limitation
 ##############################################################
 import sys, time # taking argv and sleeper
 import smtplib # for SMTP mailing features
@@ -72,13 +85,13 @@ import smtplib # for SMTP mailing features
 smtpAddr = 'smtp.gmail.com' #@see REFERENCE section
 port = '465'
 username = 'aaronishere@gmail.com'
-password = '06936841' #ZdC0oII0
+password = '69279308' #ZdC0oII0
 fromAddr = 'test@test.com'
 toAddr = ['gethighprofit@gmail.com','Aaron <aaronishere@gmail.com>']#, 'aaronlaw@gmail.com',  'herbalifeaaron@yahoo.com.hk', 'Kaiser KS <wwwkaiserkscom@gmail.com>', 'luk Benny <lukkaihang@hotmail.com>']
 isOverSSL = True
 
-intervalPerAction =  2 # in second
-intervalPerBunch = 5*60 # min = time*60sec
+intervalPerAction =  5 # in second
+#intervalPerBunch = 2*60 # min = time*60sec
 #################################
 
 ###### REFERENCE ######
@@ -98,6 +111,7 @@ intervalPerBunch = 5*60 # min = time*60sec
 # Google: use python to send email header
 # Google: use php to send email -> cation on the setting of 'header'
 # http://docs.python.org/library/smtplib.htm
+# Beginning Python - From Novice to Professinnas Secont Edition (2008) - Ch9:Generator
 
 from SendMail import SmartMessage, MailServer
 
@@ -176,70 +190,8 @@ content = '''
 content = content + '<p>I am Hong Kong people@TST</p>'
 
 ##### FUNCTION ######
-def readTxt(fname):
-	# I don't handle exception here (Cannot open a mailing list is not critical of the process of automation of mail-sending)
-	try:
-		file = open(fname, 'r')	
-		print ('Loading of', fname , 'is success.')
-		return file
-	except (IOError, IndexError) as error:
-		print ('An error occur:', error)
-		print ('Oh! Program is going to terminate')		
-		sys.exit()
-
-### sendMail() sends one mail from a list (one mail to a bunch of people each time)
-### It accepts a bunch of address in a list (e.g. ['1@test.com', '2@test.com'])
-def sendMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep):
-	isSuccess = False	
-	try:
-		msg = SmartMessage(fromAddr, toAddrList, subject, content)
-		msg.set_type('text/html')
-		msg.set_charset('UTF-8')
-		#msg.add_header('Content-Transfer-Encoding', '8bit')
-		#print msg.get_content_charset()		
-		#print(msg)
-		MailServer(smtpAddr, username, password, port).sendMessage(msg)
-
-		time.sleep(sleep)
-		isSuccess = True	
-	except (Exception) as error: 
-		#print (error)
-		print ('There is an error occured during sending mail.', error)
-		### put invalid mail addresses in a list to show later
-		#invalidAddr.append(toSingleAddr)
-	return isSuccess # return True when mail send successfully
-
-### sendMassMail() does sending mail to a receiver once a time
-def sendMassMail(subject, content, fromAddr, mailList, smtpAddr, username, password, port, sleep=5):
-	count = 0
-	totalOfAddr = 0
-	print 'I am in mass mail mode. I am goint to send mail in every '+ str(sleep) + ' second.'
-	for toSingleAddr in mailList:
-
-		print 'Processing ' + toSingleAddr + '...'
-		toAddr = toSingleAddr.rstrip("\r\n")  # work around: the ending '\n' char in an address leads to a bug. That bug is 'text\html' doesn't work and leads to the outing mail being plain text
-					# Reference: Google: python remove \n
- 		isSuccess = sendMail(subject, content, fromAddr, toAddr, smtpAddr, username, password, port, sleep)
-		if isSuccess is True:
-			count = count + 1 # count is up only when mail out was success (@see isSuccess in sendMail())
-			print 'Mail #',count,' is sent to ' + toSingleAddr + '.'
-		else:
-			print 'Mail #',count,' is not sent to ' + toSingleAddr +'.'
-
-		totalOfAddr = totalOfAddr + 1 # totalOfAddr is up whenever mail out was success or not
-		# pause every 30 mail
-		if totalOfAddr % 30 == 0:
-			print('I am going to sleep ',intervalPerBunch, 'seconds.')
-			time.sleep(intervalPerBunch)
-	print('There are ', count, ' out of', totalOfAddr, 'mail sent successfully.')
-
-### mailList is a list of receivers
-def sendRepeatMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep=5, repeat=1):
-	print 'I am in repeat mail mode. I am goint to send mail in every '+ str(sleep) + ' second.'
-	for i in repeat:
-		print 'Repeat mail round #', i
-		print 'Processing... ' + toSingleAddr,
-		sendMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep)
+### @Version1.2.1.2_freeze: moved to mailer_func.py
+from mailer_func import *
 
 ##### MAIN ######
 count = 0
@@ -253,6 +205,5 @@ print('Mail is begin to send...' )
 #sendMail(subject, content, fromAddr, ['hh@gg.com', '22@33.com'], smtpAddr, username, password, port, intervalPerAction)
 #sendMassMail(subject, content, fromAddr, ['hh@test.com', '22@test.com'], smtpAddr, username, password, port, intervalPerAction)
 sendMassMail(subject, content, fromAddr, mailingList, smtpAddr, username, password, port, intervalPerAction)
-
 
 print invalidAddr
