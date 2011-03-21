@@ -60,7 +60,9 @@
 #
 # 2011-02-06:
 # Version 1.2.1.2_freeze:
-#			Same as Version 1.2.1.2, excepts custom functions are moved to mailer_func.py 
+#		Same as Version 1.2.1.2, excepts all custom functions are moved to mailer_func.py 
+# Version 1.3: Intend to simulate human's behaviour:
+#		Function prototype correction: remove unneccessary argement "sleep" from sendMail(..., sleep)
 #
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -99,10 +101,11 @@ intervalPerAction =  5 # in second
 #gmail: 	smtp.gmail.com:465 (over SSL)
 #yahoo mail:	smtp.mail.yahoo.com:465
 #hotmail:	
-#mail.com:	
+#mail.com:	smtp.mail.com:465
 #inbox.com:	
 #gmx.com:	mail.gmx.com:465
 #kaiserks.com:	mail.photo.kaiserks.com
+# Google:'gmail port' gives me: http://www.emailaddressmanager.com/tips/mail-settings.html 
 #################################	
 
 #TODO: http://www.wrox.com ISBN is 978-0-470-41463-7
@@ -110,6 +113,7 @@ intervalPerAction =  5 # in second
 # Google: use python to send email 
 # Google: use python to send email header
 # Google: use php to send email -> cation on the setting of 'header'
+# try to connect to gmail's server? try "telnet smtp.gmail.com" (helps from gmail's document)
 # http://docs.python.org/library/smtplib.htm
 # Beginning Python - From Novice to Professinnas Secont Edition (2008) - Ch9:Generator
 
@@ -192,17 +196,16 @@ content = content + '<p>I am Hong Kong people@TST</p>'
 ##### FUNCTION ######
 ### @Version1.2.1.2_freeze: moved to mailer_func.py
 from mailer_func import *
-
 ##### MAIN ######
 count = 0
 totalOfAddr = 0 # number of email recever
 invalidAddr = []
 
-mailingList = readTxt(sys.argv[1])
-#print( type(mailingList))
+mailingList = readTxt(sys.argv[1]) # return a location of a file
+print( type(mailingList))# it's a location of a file
 #totalOfAddr = len(mailingList.readlines())
 print('Mail is begin to send...' )
-#sendMail(subject, content, fromAddr, ['hh@gg.com', '22@33.com'], smtpAddr, username, password, port, intervalPerAction)
+#sendMail(subject, content, fromAddr, ['hh@gg.com', '22@33.com'], smtpAddr, username, password, port)
 #sendMassMail(subject, content, fromAddr, ['hh@test.com', '22@test.com'], smtpAddr, username, password, port, intervalPerAction)
 sendMassMail(subject, content, fromAddr, mailingList, smtpAddr, username, password, port, intervalPerAction)
 
