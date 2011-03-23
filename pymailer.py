@@ -71,6 +71,8 @@
 #		2. delayLikeAHuman()...done
 #		3. randomString()...done
 #		Function prototype correction: remove unneccessary argement "sleep" from sendMail(..., sleep)
+# 2011-03-20:
+# Version control: I put the source code from v0 to v1.3 into git for version controling since that day.
 #
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
@@ -81,10 +83,12 @@
 #		6.1 [x] Make it robust to handle dead/invaild email address (no program crash)
 #	7. [] Message template: Able to read external file as the content (html) of the message body
 #	8. [x] Warp up: Tidy up code section to let others use my program...easily (May be warp up with function)
-#	9. [] Write hints for usage
+#		14. [] change to use string formatting to display print() information
+#	13 [] Use optparse to handle command line argument
+#		9. [] Write hints for usage
 # 	10. [] Have I separate data and logic?
-#	11. [] As a bots: Simulate human's behaviour to confuse mail providers
-#	12..[] Multiple-user-account: randomly pick up a user account to send mail to prevent mail providers' daily-out limitation
+#	11. [x] As a bots: Simulate human's behaviour to confuse mail providers
+#	12.. [] Multiple-user-account: randomly pick up a user account to send mail to prevent mail providers' daily-out limitation
 ##############################################################
 import sys, time # taking argv and sleeper
 import smtplib # for SMTP mailing features
