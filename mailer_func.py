@@ -1,5 +1,6 @@
 ##### FUNCTION ######
 ### custom functions in mailer.py are moved to here since Version1.2.1.2_freeze
+### documentation and comment is writen in pymailer.py since this file is part of it
 import sys, time # taking argv and sleeper
 import smtplib # for SMTP mailing features
 from SendMail import SmartMessage, MailServer
