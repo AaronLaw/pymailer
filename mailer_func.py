@@ -10,7 +10,7 @@ def readTxt(fname):
 	# I don't handle exception here (Cannot open a mailing list is not critical of the process of automation of mail-sending)
 	try:
 		file = open(fname, 'r')	
-		print ('Loading of', fname , 'is success.')
+		print ('Loading of %s is success.' % (fname ))
 		return file
 	except (IOError, IndexError) as error:
 		print ('An error occur:', error)
@@ -62,36 +62,36 @@ def sendMassMail(subject, content, fromAddr, mailList, smtpAddr, username, passw
 	count = 0
 	totalOfAddr = 0
 	#intervalPerBunch = pauseInRandom(sleep)*60 # min = time*60sec # move downward, not in here...see a bug?
-	print 'I am in mass mail mode. I am goint to send mail in average every '+ str(sleep) + ' second.'
-	sendMail('Notice: '+subject+ ' from '+ fromAddr, content, fromAddr, ['aaronishere@gmail.com', 'gethighprofit@gmail.com'], smtpAddr, username, password, port)
+	print 'I am in mass mail mode. I am goint to send mail in average every %2i second.' % (sleep)
+	sendMail('Notice: '+subject+ 'is sent from '+ fromAddr, content, fromAddr, ['aaronishere@gmail.com', 'gethighprofit@gmail.com'], smtpAddr, username, password, port)
 	for toSingleAddr in mailList:
-		print 'Processing ' + toSingleAddr + '...'
+		print 'Processing %s ...' % (toSingleAddr )
 		toAddr = toSingleAddr.rstrip("\r\n")  # work around: the ending '\n' char in an address leads to a bug. That bug is 'text\html' doesn't work and leads to the outing mail being plain text
 					# Reference: Google: python remove \n
  		isSuccess = sendMail(subject, content, fromAddr, toAddr, smtpAddr, username, password, port)
 		delayLikeAHuman(sleep)
 		if isSuccess is True:
 			count = count + 1 # count is up only when mail out was success (@see isSuccess in sendMail())
-			print 'Mail #',count,' is sent to ' + toSingleAddr + '.'
+			print 'Mail #%2i is sent to %s'% (count, toSingleAddr)
 		else:
-			print 'Mail #',count,' is not sent to ' + toSingleAddr +'.'
+			print 'Mail is not sent to %s' % (toSingleAddr)
 
 		totalOfAddr = totalOfAddr + 1 # totalOfAddr is up whenever mail out was success or not
 		# pause every 30 mail
 		if totalOfAddr % 30 == 0:
 			intervalPerBunch = pauseInRandom(sleep)*60 # min = time*60sec 
-			print('So tired...I have to take a rest for ',intervalPerBunch/60, 'minutes.')
+			print('So tired...I have to take a rest for %2i minutes.' % (intervalPerBunch/60) )
 			delayLikeAHuman(intervalPerBunch)
 			print('OK, I feel better now.')
-	print('There are ', count, ' out of', totalOfAddr, 'mail sent successfully.')
+	print('There are %2i out of %2i mail sent successfully.' % (count, totalOfAddr) )
 	print('If you found a bug or an idea, pls report to aaronlaw@gmail.com. Thanks for using it, bye!' )
 
 ### send mail to a list of receivers repeatly
 ### mailList is a list of receivers
 def sendRepeatMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port, sleep=5, repeat=1):
-	print 'I am in repeat mail mode. I am goint to send mail in every '+ str(sleep) + ' second.'
+	print 'I am in repeat mail mode. I am goint to send mail in every %2i second.' % (sleep)
 	for i in repeat:
-		print 'Repeat mail round #', i
-		print 'Processing... ' + toSingleAddr,
+		print 'Repeat mail round #%2i'% (i)
+		print 'Processing... %s'% (toSingleAddr)
 		sendMail(subject, content, fromAddr, toAddrList, smtpAddr, username, password, port)
 

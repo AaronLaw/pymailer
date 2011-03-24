@@ -74,6 +74,9 @@
 # 2011-03-20:
 # Version control: I put the source code from v0 to v1.3 into git for version controling since that day.
 #
+#2011-03-23:
+# Version 1.3.1: Use string formatter to display output
+#
 #TODO:	1. [x] Fix encoding problem (unicode support)
 #	2. [x] Do pratical test with Gmail (Can I use Gmail to send out email?)
 #	3. [x] Repeat mailing (Can I send out a mail to a person, 180 times in a 5 sec interval?)
