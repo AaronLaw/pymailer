@@ -9,6 +9,8 @@ It runs on python 2.
 Firstly you've to prepare the content of mail in the "Body" block, then
 
     python pymailer.py
+    
+And, you can change the time interval every mail sent out too.
 
 
 PSEUDO CODE
